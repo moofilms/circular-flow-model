@@ -227,40 +227,40 @@
 
 /* Screen-pixel type so the graph stays readable when it shrinks to phone width */
 .cf-diagram .cf-node-title {
-  font-size: 13.5px;
+  font-size: 16px;
   font-weight: 700;
 }
 .cf-diagram .cf-node-sub {
-  font-size: 10.5px;
+  font-size: 12px;
 }
 .cf-diagram .cf-flow-label {
-  font-size: 12.5px;
+  font-size: 14.5px;
   font-weight: 700;
 }
 .cf-diagram .cf-flow-dollar {
-  font-size: 14px;
+  font-size: 16px;
   font-weight: 800;
 }
 .cf-diagram .cf-legend {
-  font-size: 12px;
+  font-size: 13.5px;
   font-weight: 600;
 }
 
 @media (max-width: 639px) {
   .cf-diagram .cf-node-title {
-    font-size: 15px;
+    font-size: 16.5px;
   }
   .cf-diagram .cf-node-sub {
     display: none;
   }
   .cf-diagram .cf-flow-label {
-    font-size: 13px;
+    font-size: 14.5px;
   }
   .cf-diagram .cf-flow-dollar {
-    font-size: 14px;
+    font-size: 16px;
   }
   .cf-diagram .cf-legend {
-    font-size: 12px;
+    font-size: 13.5px;
   }
   .cf-diagram .cf-house {
     display: none;
@@ -269,19 +269,19 @@
 
 @media (min-width: 640px) {
   .cf-diagram .cf-node-title {
-    font-size: 16px;
+    font-size: 18px;
   }
   .cf-diagram .cf-node-sub {
-    font-size: 12px;
-  }
-  .cf-diagram .cf-flow-label {
     font-size: 13.5px;
   }
+  .cf-diagram .cf-flow-label {
+    font-size: 16px;
+  }
   .cf-diagram .cf-flow-dollar {
-    font-size: 15px;
+    font-size: 18px;
   }
   .cf-diagram .cf-legend {
-    font-size: 13px;
+    font-size: 15px;
   }
 }
 

@@ -23,10 +23,10 @@ const NODE_POS: Record<
   NodeId,
   { x: number; y: number; w: number; h: number }
 > = {
-  factor: { x: 400, y: 80, w: 228, h: 76 },
-  product: { x: 400, y: 620, w: 228, h: 76 },
-  firms: { x: 108, y: 350, w: 168, h: 96 },
-  households: { x: 692, y: 350, w: 168, h: 96 },
+  factor: { x: 400, y: 80, w: 236, h: 80 },
+  product: { x: 400, y: 620, w: 236, h: 80 },
+  firms: { x: 108, y: 350, w: 176, h: 100 },
+  households: { x: 692, y: 350, w: 176, h: 100 },
 };
 
 type Seg = {
@@ -40,90 +40,88 @@ type Seg = {
 };
 
 /**
- * Elliptical arc segments — smooth circular rings.
- * Outer: rx≈275 ry≈245, counterclockwise (real)
- * Inner: rx≈175 ry≈160, clockwise (money)
- * Labels sit mid-arc, clear of boxes and the house icon.
+ * Cubic segments that leave/enter boxes head-on (perpendicular to the edge).
+ * Outer = real, counterclockwise. Inner = money, clockwise.
  */
 const SEGMENTS: Seg[] = [
-  // Outer real · HH → Resource Market (top-right quarter)
+  // HH top → Resource Market right
   {
     id: "factors-right",
     flow: "factors",
-    d: "M 692 302 A 275 245 0 0 0 500 82",
+    d: "M 720 300 C 720 175, 630 80, 528 80",
     label: "Factors",
-    lx: 630,
-    ly: 160,
+    lx: 638,
+    ly: 158,
     money: false,
   },
-  // Outer real · Resource Market → Firms (top-left quarter)
+  // Resource Market left → Firms top
   {
     id: "factors-left",
     flow: "factors",
-    d: "M 300 82 A 275 245 0 0 0 108 302",
+    d: "M 272 80 C 170 80, 108 175, 108 288",
     label: "Factors / inputs",
-    lx: 170,
-    ly: 160,
+    lx: 162,
+    ly: 158,
     money: false,
   },
-  // Outer real · Firms → Product Market (bottom-left quarter)
+  // Firms bottom → Product Market left
   {
     id: "goods-left",
     flow: "goods",
-    d: "M 108 398 A 275 245 0 0 0 300 618",
+    d: "M 108 412 C 108 525, 170 620, 272 620",
     label: "Goods & services",
-    lx: 155,
-    ly: 540,
+    lx: 148,
+    ly: 542,
     money: false,
   },
-  // Outer real · Product Market → HH (bottom-right quarter)
+  // Product Market right → HH bottom
   {
     id: "goods-right",
     flow: "goods",
-    d: "M 500 618 A 275 245 0 0 0 692 398",
+    d: "M 528 620 C 630 620, 720 525, 720 412",
     label: "Goods & services",
-    lx: 645,
-    ly: 540,
+    lx: 652,
+    ly: 542,
     money: false,
   },
-  // Inner money · Firms → Resource Market (Costs)
+  // Firms top-inner → Resource Market bottom (Costs)
   {
     id: "costs",
     flow: "factor-payments",
-    d: "M 184 308 A 175 160 0 0 1 350 148",
+    d: "M 148 300 C 148 210, 348 208, 348 132",
     label: "Costs",
-    lx: 250,
-    ly: 225,
+    lx: 248,
+    ly: 218,
     money: true,
   },
-  // Inner money · Resource Market → HH (Income)
+  // Resource Market bottom → HH top-inner (Income)
   {
     id: "income",
     flow: "factor-payments",
-    d: "M 450 148 A 175 160 0 0 1 616 308",
+    d: "M 452 132 C 452 208, 652 210, 652 300",
     label: "Income",
-    lx: 550,
-    ly: 225,
+    lx: 552,
+    ly: 218,
     money: true,
   },
-  // Inner money · HH → Product Market (Consumption)
+  // HH bottom-inner → Product Market top (Consumption)
   {
     id: "consumption",
     flow: "expenditure",
-    d: "M 616 392 A 175 160 0 0 1 450 552",
+    d: "M 652 400 C 652 490, 452 492, 452 568",
     label: "Consumption",
-    lx: 550,
-    ly: 475,
+    lx: 552,
+    ly: 482,
     money: true,
   },
-  // Inner money · Product Market → Firms (Revenue)
+  // Product Market top → Firms bottom-inner (Revenue)
   {
     id: "revenue",
     flow: "expenditure",
-    d: "M 350 552 A 175 160 0 0 1 184 392",
+    d: "M 348 568 C 348 492, 148 490, 148 400",
     label: "Revenue",
-    lx: 250,
-    ly: 475,
+    lx: 248,
+    ly: 482,
     money: true,
   },
 ];
@@ -260,28 +258,28 @@ export function CircularFlowDiagram({
         </marker>
       </defs>
 
-      {/* Soft guide rings for circular reading */}
+      {/* Soft guide rings — sit behind the directed loops */}
       <ellipse
         cx="400"
         cy="350"
-        rx="275"
-        ry="245"
+        rx="268"
+        ry="238"
         fill="none"
         stroke="var(--color-border)"
         strokeWidth="1.25"
         strokeDasharray="5 9"
-        opacity="0.4"
+        opacity="0.28"
       />
       <ellipse
         cx="400"
         cy="350"
-        rx="175"
-        ry="160"
+        rx="168"
+        ry="150"
         fill="none"
         stroke="var(--color-border)"
         strokeWidth="1"
         strokeDasharray="4 8"
-        opacity="0.32"
+        opacity="0.22"
       />
 
       {visibleSegs.map((seg) => {
@@ -296,7 +294,7 @@ export function CircularFlowDiagram({
           ? "var(--color-money-soft)"
           : "var(--color-real-soft)";
         const labelW =
-          seg.label.length > 15 ? 190 : seg.label.length > 10 ? 168 : 124;
+          seg.label.length > 15 ? 210 : seg.label.length > 10 ? 186 : 132;
         const baseW = active
           ? seg.money
             ? 5
