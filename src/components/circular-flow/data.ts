@@ -243,6 +243,3 @@ export function isNodeId(id: string): id is NodeId {
 export function isFlowId(id: string): id is FlowId {
   return id in FLOWS;
 }
-
-/** Base income units for the playground (billions, illustrative). */
-export const BASE_INCOME = 100;

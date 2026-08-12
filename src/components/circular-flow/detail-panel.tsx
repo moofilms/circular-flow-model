@@ -65,16 +65,6 @@ export function DetailPanel({ selected, onClear, onSelect }: Props) {
             );
           })}
         </div>
-
-        <div className="nb-well mt-1 px-4 py-3.5">
-          <p className="text-xs font-semibold uppercase tracking-wide text-fg-subtle">
-            Layout tip
-          </p>
-          <p className="mt-1.5 text-sm leading-snug text-fg-muted">
-            Firms sit on the left, households on the right — same as the classic
-            textbook figure. Outer coral = real; inner teal = money.
-          </p>
-        </div>
       </aside>
     );
   }
