@@ -172,67 +172,69 @@ export function CircularFlowApp() {
         </section>
 
         {inTour && step ? (
-          <aside className="nb-card flex flex-col gap-4 border-accent/20 p-5 sm:p-6">
-            <div>
-              <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-accent">
+          <aside className="nb-card flex h-full min-h-[24rem] flex-col border-accent/20 p-5 sm:p-6">
+            <div className="min-h-0 flex-1">
+              <p className="text-xs font-semibold uppercase tracking-[0.14em] text-accent sm:text-sm">
                 Tour · Step {tourStep! + 1} of {TOUR.length}
               </p>
-              <h2 className="mt-1 text-xl font-semibold tracking-tight text-heading">
+              <h2 className="mt-2 text-2xl font-semibold tracking-tight text-heading sm:text-[1.65rem] sm:leading-tight">
                 {step.title}
               </h2>
-              <p className="mt-2 text-sm leading-relaxed text-fg-muted">
+              <p className="mt-3 text-base leading-relaxed text-fg-muted sm:text-[1.05rem]">
                 {step.body}
               </p>
             </div>
-            <div className="flex items-center gap-2">
-              <button
-                type="button"
-                className="nb-btn size-10 justify-center p-0"
-                onClick={prevTour}
-                disabled={tourStep === 0}
-                aria-label="Previous step"
-              >
-                <ChevronLeft className="size-4" />
-              </button>
-              <button
-                type="button"
-                className="nb-btn nb-btn-active px-4 py-2.5 text-sm"
-                onClick={nextTour}
-              >
-                {tourStep! >= TOUR.length - 1 ? "Finish" : "Next"}
-                {tourStep! < TOUR.length - 1 && (
-                  <ChevronRight className="size-3.5 opacity-80" aria-hidden />
-                )}
-              </button>
-              <button
-                type="button"
-                className="nb-btn ml-auto px-3 py-2.5 text-sm"
-                onClick={() => {
-                  exitTour();
-                  setSelected(null);
-                }}
-              >
-                Close
-              </button>
-            </div>
-            <div className="flex gap-1">
-              {TOUR.map((t, i) => (
+            <div className="mt-auto shrink-0 pt-5">
+              <div className="flex items-center gap-2">
                 <button
-                  key={t.id}
                   type="button"
-                  aria-label={`Go to step ${i + 1}`}
-                  onClick={() => setTourStep(i)}
-                  className="h-1.5 flex-1 rounded-full transition"
-                  style={{
-                    background:
-                      i === tourStep
-                        ? "var(--color-accent)"
-                        : i < (tourStep ?? 0)
-                          ? "color-mix(in oklab, var(--color-accent) 45%, var(--color-border))"
-                          : "var(--color-border)",
+                  className="nb-btn size-10 justify-center p-0"
+                  onClick={prevTour}
+                  disabled={tourStep === 0}
+                  aria-label="Previous step"
+                >
+                  <ChevronLeft className="size-4" />
+                </button>
+                <button
+                  type="button"
+                  className="nb-btn nb-btn-active px-4 py-2.5 text-sm"
+                  onClick={nextTour}
+                >
+                  {tourStep! >= TOUR.length - 1 ? "Finish" : "Next"}
+                  {tourStep! < TOUR.length - 1 && (
+                    <ChevronRight className="size-3.5 opacity-80" aria-hidden />
+                  )}
+                </button>
+                <button
+                  type="button"
+                  className="nb-btn ml-auto px-3 py-2.5 text-sm"
+                  onClick={() => {
+                    exitTour();
+                    setSelected(null);
                   }}
-                />
-              ))}
+                >
+                  Close
+                </button>
+              </div>
+              <div className="mt-4 flex gap-1">
+                {TOUR.map((t, i) => (
+                  <button
+                    key={t.id}
+                    type="button"
+                    aria-label={`Go to step ${i + 1}`}
+                    onClick={() => setTourStep(i)}
+                    className="h-1.5 flex-1 rounded-full transition"
+                    style={{
+                      background:
+                        i === tourStep
+                          ? "var(--color-accent)"
+                          : i < (tourStep ?? 0)
+                            ? "color-mix(in oklab, var(--color-accent) 45%, var(--color-border))"
+                            : "var(--color-border)",
+                    }}
+                  />
+                ))}
+              </div>
             </div>
           </aside>
         ) : (
