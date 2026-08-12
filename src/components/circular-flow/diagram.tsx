@@ -84,41 +84,41 @@ const SEGMENTS: Seg[] = [
     ly: 542,
     money: false,
   },
-  // Firms top-inner → Resource Market bottom (Costs)
+  // Firms inner → Resource Market bottom-left (Costs) — arrive tilted into the box
   {
     id: "costs",
     flow: "factor-payments",
-    d: "M 148 300 C 148 210, 348 208, 348 132",
+    d: "M 168 300 C 230 228, 292 168, 342 128",
     label: "Costs",
     lx: 248,
     ly: 218,
     money: true,
   },
-  // Resource Market bottom → HH top-inner (Income)
+  // Resource Market bottom-right → HH inner (Income)
   {
     id: "income",
     flow: "factor-payments",
-    d: "M 452 132 C 452 208, 652 210, 652 300",
+    d: "M 458 128 C 508 168, 570 228, 632 300",
     label: "Income",
     lx: 552,
     ly: 218,
     money: true,
   },
-  // HH bottom-inner → Product Market top (Consumption)
+  // HH inner → Product Market top-right (Consumption)
   {
     id: "consumption",
     flow: "expenditure",
-    d: "M 652 400 C 652 490, 452 492, 452 568",
+    d: "M 632 400 C 570 472, 508 532, 458 572",
     label: "Consumption",
     lx: 552,
     ly: 482,
     money: true,
   },
-  // Product Market top → Firms bottom-inner (Revenue)
+  // Product Market top-left → Firms inner (Revenue)
   {
     id: "revenue",
     flow: "expenditure",
-    d: "M 348 568 C 348 492, 148 490, 148 400",
+    d: "M 342 572 C 292 532, 230 472, 168 400",
     label: "Revenue",
     lx: 248,
     ly: 482,
