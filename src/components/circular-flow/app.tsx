@@ -52,6 +52,11 @@ export function CircularFlowApp() {
     if (step) applyTourFocus(step.focus);
   }, [step, applyTourFocus]);
 
+  const exitTour = () => {
+    setTourStep(null);
+    setShow("both");
+  };
+
   const reset = () => {
     setSelected(null);
     setHovered(null);
@@ -144,7 +149,12 @@ export function CircularFlowApp() {
           <div
             className="nb-well relative overflow-hidden px-0 py-1 sm:px-2 sm:py-2"
             onClick={() => {
-              if (!inTour) setSelected(null);
+              if (inTour) {
+                exitTour();
+                setSelected(null);
+                return;
+              }
+              setSelected(null);
             }}
           >
             <CircularFlowDiagram
@@ -153,7 +163,7 @@ export function CircularFlowApp() {
               show={show}
               animating={animating}
               onSelect={(id) => {
-                if (inTour) setTourStep(null);
+                if (inTour) exitTour();
                 setSelected(id);
               }}
               onHover={setHovered}
@@ -161,63 +171,51 @@ export function CircularFlowApp() {
           </div>
         </section>
 
-        <DetailPanel
-          selected={selected}
-          onClear={() => setSelected(null)}
-          onSelect={setSelected}
-        />
-      </div>
-
-      <div className="mt-6 flex flex-col gap-4">
-        <div>
-          <button
-            type="button"
-            className={`nb-btn px-4 py-2.5 text-sm ${inTour ? "nb-btn-active" : ""}`}
-            onClick={() => (inTour ? setTourStep(null) : startTour())}
-            aria-pressed={inTour}
-          >
-            <BookOpen className="size-3.5 opacity-70" aria-hidden />
-            {inTour ? "Exit tour" : "Guided tour"}
-          </button>
-        </div>
-
-        {inTour && step && (
-          <div className="nb-card border-accent/20 p-4 sm:p-5">
-            <div className="flex flex-col gap-3 sm:flex-row sm:items-start sm:justify-between">
-              <div className="min-w-0 flex-1">
-                <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-accent">
-                  Tour · Step {tourStep! + 1} of {TOUR.length}
-                </p>
-                <h2 className="mt-1 text-lg font-semibold tracking-tight text-heading">
-                  {step.title}
-                </h2>
-                <p className="mt-1.5 text-sm leading-relaxed text-fg-muted">
-                  {step.body}
-                </p>
-              </div>
-              <div className="flex shrink-0 items-center gap-2">
-                <button
-                  type="button"
-                  className="nb-btn size-10 justify-center p-0"
-                  onClick={prevTour}
-                  disabled={tourStep === 0}
-                  aria-label="Previous step"
-                >
-                  <ChevronLeft className="size-4" />
-                </button>
-                <button
-                  type="button"
-                  className="nb-btn nb-btn-active px-4 py-2.5 text-sm"
-                  onClick={nextTour}
-                >
-                  {tourStep! >= TOUR.length - 1 ? "Finish" : "Next"}
-                  {tourStep! < TOUR.length - 1 && (
-                    <ChevronRight className="size-3.5 opacity-80" aria-hidden />
-                  )}
-                </button>
-              </div>
+        {inTour && step ? (
+          <aside className="nb-card flex flex-col gap-4 border-accent/20 p-5 sm:p-6">
+            <div>
+              <p className="text-[11px] font-semibold uppercase tracking-[0.14em] text-accent">
+                Tour · Step {tourStep! + 1} of {TOUR.length}
+              </p>
+              <h2 className="mt-1 text-xl font-semibold tracking-tight text-heading">
+                {step.title}
+              </h2>
+              <p className="mt-2 text-sm leading-relaxed text-fg-muted">
+                {step.body}
+              </p>
             </div>
-            <div className="mt-3.5 flex gap-1">
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                className="nb-btn size-10 justify-center p-0"
+                onClick={prevTour}
+                disabled={tourStep === 0}
+                aria-label="Previous step"
+              >
+                <ChevronLeft className="size-4" />
+              </button>
+              <button
+                type="button"
+                className="nb-btn nb-btn-active px-4 py-2.5 text-sm"
+                onClick={nextTour}
+              >
+                {tourStep! >= TOUR.length - 1 ? "Finish" : "Next"}
+                {tourStep! < TOUR.length - 1 && (
+                  <ChevronRight className="size-3.5 opacity-80" aria-hidden />
+                )}
+              </button>
+              <button
+                type="button"
+                className="nb-btn ml-auto px-3 py-2.5 text-sm"
+                onClick={() => {
+                  exitTour();
+                  setSelected(null);
+                }}
+              >
+                Close
+              </button>
+            </div>
+            <div className="flex gap-1">
               {TOUR.map((t, i) => (
                 <button
                   key={t.id}
@@ -236,8 +234,26 @@ export function CircularFlowApp() {
                 />
               ))}
             </div>
-          </div>
+          </aside>
+        ) : (
+          <DetailPanel
+            selected={selected}
+            onClear={() => setSelected(null)}
+            onSelect={setSelected}
+          />
         )}
+      </div>
+
+      <div className="mt-6">
+        <button
+          type="button"
+          className={`nb-btn px-4 py-2.5 text-sm ${inTour ? "nb-btn-active" : ""}`}
+          onClick={() => (inTour ? (exitTour(), setSelected(null)) : startTour())}
+          aria-pressed={inTour}
+        >
+          <BookOpen className="size-3.5 opacity-70" aria-hidden />
+          {inTour ? "Exit tour" : "Guided tour"}
+        </button>
       </div>
     </div>
   );
